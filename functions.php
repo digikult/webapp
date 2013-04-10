@@ -1,20 +1,25 @@
 <?php
 
 //Get IP-adress
-function get_coord() { 
-	$ip = 'empty';
 
-	//See if the client was forwarded from a proxy
-	foreach ( getallheaders() as $name => $value ) {
-		if( strcasecmp( $name, "x-forwarded-for" ) == 0 ) {
-			$ip = $value;
-		}
-	}
-	//If not, use the reported ip
-	if ($ip == 'empty') {
-		$ip=$_SERVER['REMOTE_ADDR'];
-	}
+function get_ip() {
+        $ip = 'empty';
 
+        //See if the client was forwarded from a proxy
+        foreach ( getallheaders() as $name => $value ) {
+                if( strcasecmp( $name, "x-forwarded-for" ) == 0 ) {
+                        $ip = $value;
+                }
+        }
+        //If not, use the reported ip
+        if ($ip == 'empty') {
+                $ip=$_SERVER['REMOTE_ADDR'];
+        }
+	return $ip;
+}
+
+function hostip() { 
+	$ip = get_ip();
 	//Set query string for geoip api
 	$geo_api_url='http://api.hostip.info/get_json.php?ip=' . $ip . '&position=true';
 
@@ -23,4 +28,38 @@ function get_coord() {
 	$json_coord=json_decode($string,true);
 
 	return  array( "lat" => $json_coord['lat'], "long" => $json_coord['lng'], "city" => $json_coord['city'], );
+}
+
+
+function maxmind() {
+	require_once("geodata/geoipcity.inc");
+	require_once("geodata/geoipregionvars.php");
+	$ip = get_ip();
+	$gi = geoip_open("geodata/GeoLiteCity.dat",GEOIP_STANDARD);
+	$record = geoip_record_by_addr($gi,$ip);
+	$lat = $record->latitude;
+	$long = $record->longitude;
+	$city = $record->city;
+	geoip_close($gi);
+
+	return  array( "lat" => $lat, "long" => $long, "city" => $city, );
+}
+
+function check_empty($arr) {
+	$check = false;
+	foreach($arr as $item) {
+		if( empty($item) ) {
+			$check = true;
+		}
+	} 
+	return $check;
+} 
+
+function get_coord() {
+	$arr = maxmind();
+	if( check_empty($arr) ) {
+		$arr = hostip();
+	}
+	return $arr;
+
 }

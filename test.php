@@ -1,0 +1,22 @@
+<?php
+require_once('functions.php');
+$coord = get_coord();
+?>
+<!DOCTYPE html>  
+<html>  
+  <head>  
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/geolocation.js"></script>
+    <script>
+	function display_coord() {
+		alert("Lat: <?php echo $coord['lat'] ?> Long: <?php echo $coord['long'] ?>");
+	}
+    </script>
+  </head>  
+  <body>  
+    <div>  
+      <button id="btnInit" >Find my location via browser/GPS</button><br>  
+      <button onclick="display_coord()">Find my location via IP-address</button>  
+    </div>  
+  </body>  
+</html> 
