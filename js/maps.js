@@ -33,7 +33,8 @@ function map_init() {
 
                 trigger: function(e) {
                     var lonlat = map.getLonLatFromPixel(e.xy);
-                    alert("Lat: " + lonlat.lat + " Long: " + lonlat.lon );
+  		    var lonlat1= new OpenLayers.LonLat(lonlat.lon,lonlat.lat).transform(toProjection,fromProjection);
+                    alert("Lat: " + lonlat1.lat + " Long: " + lonlat1.lon );
                 }
 	});
 	var click = new OpenLayers.Control.Click();
