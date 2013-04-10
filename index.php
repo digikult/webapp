@@ -45,9 +45,7 @@
 	<div class="container">
 <?php 
 	echo "\t\t<h1>Kultur i närheten</h1>\n";
-	$coord = get_coord();
-	get_results($coord); 
-	echo 'shits broken, yo'
+	print_r( get_results( get_coord() ) ); 
 ?> 
 	</div><!-- container -->
 
