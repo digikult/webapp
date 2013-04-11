@@ -205,8 +205,6 @@ class institutions extends objects {
         $this->items = $a;
         
         mysqli_close($con);
-
-
 	}
 
 	public function get_html() {
