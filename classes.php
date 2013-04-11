@@ -175,14 +175,15 @@ class wikipedia extends objects {
 /* -------------------------------------------------------------------------------- */
 class institutions extends objects {
 	public function get_items() {
-	// Check connection
+        $con = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+	    // Check connection
         if (mysqli_connect_errno())
         {
             echo "Failed to connect to MySQL: " . mysqli_connect_error();
             $this->items = array();
         }
         
-        $result = mysqli_query($con,"select name, lat, lng, url from institutions where (lat >= 55 and lat <= 56 and lng >= 12 and lng <= 13) limit 10");
+        $result = mysqli_query($con, "select name, lat, lng, url from institutions where (lat >= 55 and lat <= 56 and lng >= 12 and lng <= 13) limit 10");
         
         $a = array();
         while($row = mysqli_fetch_array($result))
