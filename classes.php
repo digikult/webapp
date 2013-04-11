@@ -266,3 +266,70 @@ class institutions extends objects {
 	}
 
 }
+
+/* -------------------------------------------------------------------------------- */
+class offkonst extends objects {
+#function get_items() {
+	private function build_query($blat, $tlat, $blong, $tlong, $limit) {
+		$format = "json";
+		$offkonst_query = "http://wlpa.wikimedia.se/odok-bot/api.php";
+        $offkonst_query .= "?action=get";
+        $offkonst_query .= "&bbox=" . sprintf("%f|%f|%f|%f", $blong, $blat, $tlong, $tlat);
+        $offkonst_query .= "&format=" . urlencode($format);
+        $offkonst_query .= "&limit=" . urlencode($limit);
+        #echo '   '.$offkonst_query.'   ';
+        return $offkonst_query;
+	}
+	
+	public function get_items() {
+        // Query params
+        $base_side = 500;// in meters
+        $limit = 10; //100;// default 10, max 100
+        $maxTries = 5;
+        $i = 1;
+        
+        $lat = $this->coord["lat"];
+        $long = $this->coord["long"];
+        
+        $itemsCount = 0;
+        $totalResults = 0;
+        
+        while ($totalResults < $limit && $maxTries-- > 0) {
+			try {
+				$bb = getbbox($lat, $long, pow($base_side, $i++));
+				if (($file = file_get_contents($this->build_query($bb["blat"], $bb["tlat"], $bb["blong"], $bb["tlong"], $limit))) === FALSE) {
+                    echo("error");
+                    $this->items = array();
+                    break;
+                }
+                $json = json_decode($file, true);
+                
+                // Set vars
+				$totalResults = count($json["body"]);
+				$success = $json["head"];
+				
+				if ($totalResults > 0) {
+					$arr = Array();
+		            foreach  ($json['body'] as $key => $value){
+						$a = $value['hit'];
+						array_push($arr, array( "title" => $a['title'], "lat" => $a['lat'], "lon" => $a['lon'], "type" => $a['type'], "address" => $a['address']));
+					}
+					$this->items = $arr;
+				} else
+                    $this->items = array();
+            } catch (Exception $error) {
+                die($error);
+            }
+        }
+    }
+    
+    public function get_html() {
+        $html = "<ul>";
+        foreach ($this->items as $item) {
+            $html .= sprintf('<li class="offkonst">%s (%s): %s <!--%f,%f--></li>', $item["title"], $item["type"], $item["address"], $item["lat"], $item["lon"]);
+        }
+        
+        $html .= "</ul>";
+        echo($html);
+    }
+}
