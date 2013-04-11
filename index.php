@@ -9,7 +9,7 @@ require_once("header.inc.php");
 	================================================== -->
 
 	<div class="container">
-        	<image src="images/Corazon.jpg"/><br/>
+        	<image src="images/Corazon.jpg" class="heart"/><br/>
       		<button id="btnInit" >Find my location via browser/GPS</button><br/><br/>
       		<button onclick="display_coord();">Find my location via IP-address</button><br/><br/>
     

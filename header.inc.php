@@ -7,7 +7,6 @@
 	<script src="js/jquery-1.9.1.min.js"></script>
 	<script src="js/geolocation.js"></script>
 	<script src="js/maps.js"></script>
-	<script src="js/main.js"></script>
 	<script src="maps/OpenLayers.js"></script>
 	<script>
         	function display_coord() {
@@ -31,7 +30,8 @@
 
 	<!-- CSS
   ================================================== -->
-        <link rel="stylesheet" href="stylesheets/maps.css"/>
+	<link rel="stylesheet" href="stylesheets/maps.css"/>
+	<link rel="stylesheet" href="stylesheets/main.css"/>
 	<link rel="stylesheet" href="stylesheets/base.css">
 	<link rel="stylesheet" href="stylesheets/skeleton.css">
 	<link rel="stylesheet" href="stylesheets/layout.css">
