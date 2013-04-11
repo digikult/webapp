@@ -191,7 +191,7 @@ class institutions extends objects {
             echo "<br />";
             $a[] = array("name"=>$row["name"], "lat"=>$row["lat"], "long"=>$row["lng"], "url"=>$row["url"]);
         }
-        $this->items[] = $a;
+        $this->items = $a;
         
         mysqli_close($con);
 
