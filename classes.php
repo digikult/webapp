@@ -179,17 +179,26 @@ class institutions extends objects {
 	    // Check connection
         if (mysqli_connect_errno())
         {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+//            echo "Failed to connect to MySQL: " . mysqli_connect_error();
             $this->items = array();
         }
+        $lat = $this->coord["lat"];
+        $long = $this->coord["long"];
+
+        $bb = getbbox($lat, $long, pow(500, $i++));
+        $latMin = $bb["blat"];
+        $latMax = $bb["tlat"];
+        $longMin = $bb["blong"];
+        $longMax = $bb["tlong"];
         
-        $result = mysqli_query($con, "select name, lat, lng, url from institutions where (lat >= 55 and lat <= 56 and lng >= 12 and lng <= 13) limit 10");
+        $query = sprintf("select name, lat, lng, url from institutions where (lat >= '%s' and lat <= '%s' and lng >= '%s' and lng <= '%s') limit 10", mysqli_real_escape_string($latMin), mysqli_real_escape_string($latMax), mysqli_real_escape_string($longMin), mysqli_real_escape_string($longMax));
+        $result = mysqli_query($con, $query);
         
         $a = array();
         while($row = mysqli_fetch_array($result))
         {
-            echo $row['name'] . " " . $row['url'];
-            echo "<br />";
+//            echo $row['name'] . " " . $row['url'];
+//            echo "<br />";
             $a[] = array("name"=>$row["name"], "lat"=>$row["lat"], "long"=>$row["lng"], "url"=>$row["url"]);
         }
         $this->items = $a;
@@ -199,6 +208,15 @@ class institutions extends objects {
 
 	}
 
-	public function get_html() {}
+	public function get_html() {
+        $html = "<ul>";
+
+        foreach ($this->items as $item) {
+            $html .= sprintf('<li class="institution"><a href="%s">%s</a></li>', $item["url"], $item["name"]);
+        }
+        
+        $html .= "</ul>";
+        echo($html);
+	}
 
 }
