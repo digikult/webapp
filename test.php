@@ -5,7 +5,7 @@ $coord = get_coord();
 <!DOCTYPE html>  
 <html>  
   <head>  
-	<link rel="stylesheet" type="text/css" href="stylesheets/main.css"/>
+<!--	<link rel="stylesheet" type="text/css" href="stylesheets/main.css"/>-->
 	<link rel="stylesheet" type="text/css" href="stylesheets/maps.css"/>
     <script src="js/jquery-1.9.1.min.js"></script>
     <script src="js/geolocation.js"></script>
