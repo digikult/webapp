@@ -64,6 +64,21 @@ function get_coord() {
 
 }
 
+function getbbox($lat, $lon, $side){
+	#lat, lon in degrees, side in m
+	$deg_per_m = (360.0/40075000);
+	
+	$latrange = $side * $deg_per_m;
+	$blat = ($lat-($latrange/2))%90;
+	$tlat = ($lat+($latrange/2))%90;
+	
+	$lonrange = $side * $deg_per_m/cos(deg2rad($lat));
+	$blon = ($lon-($lonrange/2))%180;
+	$tlon = ($lon+($lonrange/2))%180;
+	
+	return array( "blat" => $blat, "blong" => $blon, "tlat" => $tlat, "tlong" => $tlon);
+}
+
 
 function get_coords_from_GET() {
   	return  array( "lat" => $_GET['lat'], "long" => $_GET['long'], "city" => "unknown", );  
