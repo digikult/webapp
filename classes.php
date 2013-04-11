@@ -186,7 +186,7 @@ class institutions extends objects {
         
         while($row = mysqli_fetch_array($result))
         {
-            echo $row['FirstName'] . " " . $row['LastName'];
+            echo $row['name'] . " " . $row['url'];
             echo "<br />";
             $this->items[] = $row;
         }
