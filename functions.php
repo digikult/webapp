@@ -69,12 +69,12 @@ function getbbox($lat, $lon, $side){
 	$deg_per_m = (360.0/40075000);
 	
 	$latrange = $side * $deg_per_m;
-	$blat = ($lat-($latrange/2))%90;
-	$tlat = ($lat+($latrange/2))%90;
+	$blat = fmod($lat-($latrange/2),90);
+	$tlat = fmod($lat+($latrange/2),90);
 	
 	$lonrange = $side * $deg_per_m/cos(deg2rad($lat));
-	$blon = ($lon-($lonrange/2))%180;
-	$tlon = ($lon+($lonrange/2))%180;
+	$blon = fmod($lon-($lonrange/2),180);
+	$tlon = fmod($lon+($lonrange/2),180);
 	
 	return array( "blat" => $blat, "blong" => $blon, "tlat" => $tlat, "tlong" => $tlon);
 }
