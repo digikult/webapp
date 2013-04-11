@@ -191,7 +191,7 @@ class institutions extends objects {
         $longMin = $bb["blong"];
         $longMax = $bb["tlong"];
         
-        $query = sprintf("select name, lat, lng, url from institutions where (lat >= %d and lat <= %d and lng >= %d and lng <= %d) limit 10", $latMin, $latMax, $longMin, $longMax);
+        $query = sprintf("select name, lat, lng, url from institutions where (lat >= %f and lat <= %f and lng >= %f and lng <= %f) limit 10", $latMin, $latMax, $longMin, $longMax);
 	print_r($query);
         $result = mysqli_query($con, $query);
         if (!$result) {
