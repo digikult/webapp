@@ -8,7 +8,7 @@ $coords = get_coords_from_GET();
 // Initialize classes
 $europe = new europeiana($coords);
 $wiki = new wikipedia($coords);
-
+$inst = new institutions($coords);
 
 require_once("header.inc.php");
 
@@ -22,11 +22,15 @@ require_once("header.inc.php");
 	<div class="container">
 	
 	   <?php 
+
 	   echo("<h2>Europeana</h2>");
 	   $europe->get_html();
 
 	   echo("<h2>Wikipedia</h2>");
 	   $wiki->get_html();
+
+	   echo("<h2>Institutions</h2>");
+	   $inst->get_html();
 	   ?>
 
 	

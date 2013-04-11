@@ -1,5 +1,7 @@
 <?php
 
+
+/* -------------------------------------------------------------------------------- */
 abstract class objects {
     protected $coord;// = array( "lat" => 0.0, "long" => 0.0, "city" => null );
     protected $items;
@@ -21,17 +23,77 @@ abstract class objects {
 }
 
 
+/* -------------------------------------------------------------------------------- */
 class europeiana extends objects {
     /** API-KEY */
     const EUROPEANA_API_KEY = "YkFCxJxoe";
     
+    private function build_query($latMin, $latMax, $longMin, $longMax, $rows) {
+        $searchString = "*:*";
+        $start = 1;
+        $profile = "standard";
+        
+        // Build the query
+        $europeana_query = "http://europeana.eu/api//v2/search.json?wskey=" . europeiana::EUROPEANA_API_KEY;
+        $europeana_query .= "&query=" . urlencode($searchString);
+        $europeana_query .= "&qf=pl_wgs84_pos_lat" . urlencode(sprintf(":[%f TO %f]", $latMin, $latMax));
+        $europeana_query .= "&qf=pl_wgs84_pos_long" . urlencode(sprintf(":[%f TO %f]", $longMin, $longMax));
+        $europeana_query .= "&start=" . urlencode($start);
+        $europeana_query .= "&rows=" . urlencode($rows);
+        $europeana_query .= "&profile=" . urlencode($profile);
+
+        return $europeana_query;
+    }
+
     public function get_items() {
-        $itemsPerQuery = 0;
-        $totalItems = 0;
-    
-        // Make the ws call
-        // Parse JSON
-        $this->items = array(1337);
+        // Query params
+        $latMin = 0;
+        $latMax = 0;
+        $longMin = 0;
+        $longMax = 0;
+        $delta = 0.01;
+        $rows = 96;
+        $maxTries = 5;
+        $i = 1;
+        
+        $lat = $this->coord["lat"];
+        $long = $this->coord["long"];
+        
+        $itemsCount = 0;
+        $totalResults = 0;
+        while ($totalResults < $rows && $maxTries-- > 0) {
+            try {
+                // Make bounding box
+                $latMin = $lat - $delta*$i;
+                $latMax = $lat + $delta*$i;
+                $longMin = $long - $delta*$i;
+                $longMax = $long + $delta*$i;
+        
+                if (($file = file_get_contents($this->build_query($latMin, $latMax, $longMin, $longMax, $rows))) === FALSE) {
+                    echo("error");
+                    $this->items = array();
+                    break;
+                }
+                $json = json_decode($file, true);
+                
+                // Set vars
+                $itemsCount = $json["itemsCount"];
+                $totalResults = $json["totalResults"];
+                $success = $json["success"];
+                if (!$success) {
+                    $this->items = array();
+                    break;
+                }
+                print_r($json);
+                if ($itemsCount > 0)
+                    $this->items = $json["items"];
+                else
+                    $this->items = array();
+                
+            } catch (Exception $error) {
+                die($error);
+            }
+        }
     }
     
     public function get_html() {
@@ -46,6 +108,7 @@ class europeiana extends objects {
     }
 }
 
+/* -------------------------------------------------------------------------------- */
 class wikipedia extends objects {
 	public function get_items() {
         // Query params
@@ -99,6 +162,7 @@ class wikipedia extends objects {
     }
 }
 
+/* -------------------------------------------------------------------------------- */
 class institutions extends objects {
 	public function get_items() {}
 
