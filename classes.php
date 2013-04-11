@@ -174,7 +174,7 @@ class wikipedia extends objects {
 
 /* -------------------------------------------------------------------------------- */
 class institutions extends objects {
-	public function get_items() {
+	public function get_items() {/*
         $con = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 	    // Check connection
         if (mysqli_connect_errno())
@@ -217,15 +217,50 @@ class institutions extends objects {
         $this->items = $a;
         
         mysqli_close($con);
-	}
+	*/}
 
-	public function get_html() {
+	public function get_html2() {
         $html = "<ul>";
 
         foreach ($this->items as $item) {
             $html .= sprintf('<li class="institution"><a href="%s">%s</a></li>', $item["url"], $item["name"]);
         }
         
+        $html .= "</ul>";
+        echo($html);
+	}
+
+	public function get_html() {
+        $html = "<ul>";
+
+        $con = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+	    // Check connection
+        if (mysqli_connect_errno())
+        {
+//            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+            $this->items = array();
+        }
+        $lat = $this->coord["lat"];
+        $long = $this->coord["long"];
+
+        $bb = getbbox($lat, $long, 10000);
+        $latMin = $bb["blat"];
+        $latMax = $bb["tlat"];
+        $longMin = $bb["blong"];
+        $longMax = $bb["tlong"];
+        
+        $query = sprintf("select name, lat, lng, url from institutions where (lat >= %f and lat <= %f and lng >= %f and lng <= %f) limit 10", $latMin, $latMax, $longMin, $longMax);
+        $result = mysqli_query($con, $query);
+        if (!$result) {
+            printf("Errormessage: %s\n", mysqli_error($link));
+        }
+        
+        while($row = mysqli_fetch_array($result))
+        {
+            $html .= sprintf('<li class="institution"><a href="%s">%s</a></li>', $row["url"], $row["name"]);
+        }
+        
+        mysqli_close($con);
         $html .= "</ul>";
         echo($html);
 	}
