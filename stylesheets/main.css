@@ -1,3 +1,24 @@
+.heartbox {
+	width:100%;
+	text-align: center;
+	}
 .heart {
-	size:100px;
+display: block;
+	width:100px;
+	margin: 20px auto;
+}
+button {
+text-align: center;
+width: 200px;
+margin: auto;
+display: block;
+}
+
+html, body {
+margin:0;
+padding: 0;}
+#container {
+text-align: center;
+    background-image: url(images/bakgrund_utifallatt.png);
+    
 }

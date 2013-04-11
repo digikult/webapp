@@ -1,5 +1,6 @@
-html, body, #basicMap {
-	width: 80%;
-	height: 100%;
+#basicMap {
+	width: 100%;
+	min-height: 320px;
+	height: 500px;
 	margin: 0;
 }
