@@ -184,12 +184,14 @@ class institutions extends objects {
         
         $result = mysqli_query($con,"select name, lat, lng, url from institutions where (lat >= 55 and lat <= 56 and lng >= 12 and lng <= 13) limit 10");
         
+        $a = array();
         while($row = mysqli_fetch_array($result))
         {
             echo $row['name'] . " " . $row['url'];
             echo "<br />";
-            $this->items[] = $row;
+            $a[] = $row;
         }
+        $this->items[] = $a;
         
         mysqli_close($con);
 
