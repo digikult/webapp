@@ -185,20 +185,21 @@ class institutions extends objects {
         $lat = $this->coord["lat"];
         $long = $this->coord["long"];
 
-        $bb = getbbox($lat, $long, 1000);
+        $bb = getbbox($lat, $long, 10000);
         $latMin = $bb["blat"];
         $latMax = $bb["tlat"];
         $longMin = $bb["blong"];
         $longMax = $bb["tlong"];
         
-        $query = sprintf("select name, lat, lng, url from institutions where (lat >= '%d' and lat <= '%d' and lng >= '%d' and lng <= '%d') limit 10", $latMin, $latMax, $longMin, $longMax);
+        $query = sprintf("select name, lat, lng, url from institutions where (lat >= %d and lat <= %d and lng >= %d and lng <= %d) limit 10", $latMin, $latMax, $longMin, $longMax);
+	print_r($query);
         $result = mysqli_query($con, $query);
         
         $a = array();
         while($row = mysqli_fetch_array($result))
         {
-//            echo $row['name'] . " " . $row['url'];
-//            echo "<br />";
+            echo $row['name'] . " " . $row['url'];
+            echo "<br />";
             $a[] = array("name"=>$row["name"], "lat"=>$row["lat"], "long"=>$row["lng"], "url"=>$row["url"]);
         }
         $this->items = $a;
