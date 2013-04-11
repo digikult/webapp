@@ -63,3 +63,10 @@ function get_coord() {
 	return $arr;
 
 }
+
+
+function get_coords_from_GET() {
+  	return  array( "lat" => $_GET['lat'], "long" => $_GET['long'], "city" => "unknown", );  
+}
+
+?>
