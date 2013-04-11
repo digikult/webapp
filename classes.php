@@ -1,4 +1,5 @@
 <?php
+require_once("functions.php");
 
 
 /* -------------------------------------------------------------------------------- */
@@ -42,6 +43,7 @@ class europeiana extends objects {
         $europeana_query .= "&rows=" . urlencode($rows);
         $europeana_query .= "&profile=" . urlencode($profile);
 
+//        echo("query: ".$europeana_query);
         return $europeana_query;
     }
 
@@ -58,17 +60,25 @@ class europeiana extends objects {
         
         $lat = $this->coord["lat"];
         $long = $this->coord["long"];
+//        echo("{$lat} {$long}");
         
         $itemsCount = 0;
         $totalResults = 0;
         while ($totalResults < $rows && $maxTries-- > 0) {
             try {
                 // Make bounding box
-                $latMin = $lat - $delta*$i;
-                $latMax = $lat + $delta*$i;
-                $longMin = $long - $delta*$i;
-                $longMax = $long + $delta*$i;
-        
+/*                $latMin = $lat - pow($delta,$i);
+                $latMax = $lat + pow($delta,$i);
+                $longMin = $long - pow($delta,$i);
+                $longMax = $long + pow($delta,$i);*/
+
+                $bb = getbbox($lat, $long, pow(500, $i++));
+//Array ( [blat] => 53.3755084217 [blong] => -6.1875298241 [tlat] => 53.3844915783 [tlong] => -6.1724701759 )
+                $latMin = $bb["blat"];
+                $latMax = $bb["tlat"];
+                $longMin = $bb["blong"];
+                $longMax = $bb["tlong"];
+
                 if (($file = file_get_contents($this->build_query($latMin, $latMax, $longMin, $longMax, $rows))) === FALSE) {
                     echo("error");
                     $this->items = array();
@@ -84,10 +94,10 @@ class europeiana extends objects {
                     $this->items = array();
                     break;
                 }
-                print_r($json);
-                if ($itemsCount > 0)
-                    $this->items = $json["items"];
-                else
+//                print_r($json);
+                if ($itemsCount > 0) {
+                    $this->items = array_slice($json["items"], 0, 10);
+                } else
                     $this->items = array();
                 
             } catch (Exception $error) {
@@ -98,9 +108,8 @@ class europeiana extends objects {
     
     public function get_html() {
         $html = "<ul>";
-
         foreach ($this->items as $item) {
-            $html .= sprintf('<li>%s</li>', $item);
+            $html .= sprintf('<li class="europeana"><a href="http://www.europeana.eu/portal/record/%s.html">%s</a></li>', $item["id"], $item["title"][0]);
         }
         
         $html .= "</ul>";
