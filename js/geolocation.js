@@ -20,6 +20,8 @@ function handle_errors(error) {
 }  
 
 function handle_geolocation_query(position){  
-	alert('Lat: ' + position.coords.latitude +  
-	' Lon: ' + position.coords.longitude);  
+	var move_on = confirm('iSearch based on these coordinates: Lat: ' + position.coords.latitude + ' Lon: ' + position.coords.longitude);
+	if (move_on == true) {
+		window.location="/digikult/results.php?lat=" + position.coords.latitude + "&long=" + position.coords.longitude;
+        } 
 } 

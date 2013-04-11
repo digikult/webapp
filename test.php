@@ -9,10 +9,14 @@ $coord = get_coord();
     <script src="js/jquery-1.9.1.min.js"></script>
     <script src="js/geolocation.js"></script>
     <script src="js/maps.js"></script>
+    <script src="js/main.js"></script>
     <script src="maps/OpenLayers.js"></script>
     <script>
 	function display_coord() {
-		alert("Lat: <?php echo $coord['lat'] ?> Long: <?php echo $coord['long'] ?>");
+		var move_on = confirm("Search based on these coordinates: Lat: <?php echo $coord['lat'] ?> Long: <?php echo $coord['long'] ?>");
+		if (move_on == true) {
+   			window.location="/digikult/results.php?lat=<?php echo $coord['lat'] ?>&long=<?php echo $coord['long'] ?>";
+		}
 	}
     </script>
   </head>  

@@ -34,7 +34,10 @@ function map_init() {
                 trigger: function(e) {
                     var lonlat = map.getLonLatFromPixel(e.xy);
   		    var lonlat1= new OpenLayers.LonLat(lonlat.lon,lonlat.lat).transform(toProjection,fromProjection);
-                    alert("Lat: " + lonlat1.lat + " Long: " + lonlat1.lon );
+                    var move_on = confirm("Search based on these coordinates: Lat: " + lonlat1.lat + " Long: " + lonlat1.lon );
+		    if (move_on == true) {
+                        window.location="/digikult/results.php?lat=" + lonlat1.lat + "&long=" + lonlat1.lon;
+		    }
                 }
 	});
 	var click = new OpenLayers.Control.Click();
