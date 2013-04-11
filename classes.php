@@ -189,7 +189,7 @@ class institutions extends objects {
         {
             echo $row['name'] . " " . $row['url'];
             echo "<br />";
-            $a[] = $row;
+            $a[] = array("name"=>$row["name"], "lat"=>$row["lat"], "long"=>$row["lng"], "url"=>$row["url"]);
         }
         $this->items[] = $a;
         
