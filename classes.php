@@ -185,7 +185,7 @@ class institutions extends objects {
         $lat = $this->coord["lat"];
         $long = $this->coord["long"];
 
-        $bb = getbbox($lat, $long, pow(500, $i++));
+        $bb = getbbox($lat, $long, 1000);
         $latMin = $bb["blat"];
         $latMax = $bb["tlat"];
         $longMin = $bb["blong"];
