@@ -192,7 +192,12 @@ class institutions extends objects {
         $longMax = $bb["tlong"];
         
         $query = sprintf("select name, lat, lng, url from institutions where (lat >= '%d' and lat <= '%d' and lng >= '%d' and lng <= '%d') limit 10", $latMin, $latMax, $longMin, $longMax);
+        
         $result = mysqli_query($con, $query);
+        if (!$result) {
+            printf("Errormessage: %s\n", mysqli_error($link));
+        }
+
         
         $a = array();
         while($row = mysqli_fetch_array($result))
