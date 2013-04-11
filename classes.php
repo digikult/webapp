@@ -285,7 +285,7 @@ class offkonst extends objects {
         // Query params
         $base_side = 500;// in meters
         $limit = 10; //100;// default 10, max 100
-        $maxTries = 5;
+        $maxTries = 1; //5;
         $i = 1;
         
         $lat = $this->coord["lat"];
