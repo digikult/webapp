@@ -1,4 +1,4 @@
-# -*- coding: ISO-8859-1  -*-
+# -*- coding: UTF-8  -*-
 ## Scrape Wikimedia Commons for Institutions with coordinates
 ##
 ## Lokal_Profil
